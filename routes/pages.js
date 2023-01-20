@@ -6,8 +6,6 @@ const {
   userContactUsValidationRules,
   validateContactUs,
 } = require("../config/validator");
-const csrfProtection = csrf();
-router.use(csrfProtection);
 
 //GET: display abous us page
 router.get("/about-us", (req, res) => {

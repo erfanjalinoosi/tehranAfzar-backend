@@ -8,9 +8,6 @@ const Order = require("../models/order");
 const middleware = require("../middleware");
 const router = express.Router();
 
-const csrfProtection = csrf();
-router.use(csrfProtection);
-
 // GET: home page
 router.get("/", async (req, res) => {
   try {
