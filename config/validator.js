@@ -41,7 +41,7 @@ const validateSignup = (req, res, next) => {
     });
 
 
-    return res.status(404).send({
+    return res.status(400).send({
       message: "Signup failed.",
       data: {
         errors: messages
@@ -59,7 +59,7 @@ const validateSignin = (req, res, next) => {
       messages.push(error.msg);
     });
     
-    return res.status(404).send({
+    return res.status(400).send({
       message: "Signin failed.",
       data: {
         errors: messages
@@ -77,7 +77,7 @@ const validateContactUs = (req, res, next) => {
       messages.push(error.msg);
     });
 
-    return res.status(404).send({
+    return res.status(400).send({
       message: "Contact us failed.",
       data: {
         errors: messages
