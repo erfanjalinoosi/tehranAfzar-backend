@@ -25,9 +25,11 @@ app.use(express.static(path.join(__dirname, "public")));
 //routes config
 const indexRouter = require("./routes/index");
 const productsRouter = require("./routes/products");
+const categoryRouter = require("./routes/category");
 const usersRouter = require("./routes/user");
 const pagesRouter = require("./routes/pages");
 app.use("/products", productsRouter);
+app.use("/categories", categoryRouter);
 app.use("/user", usersRouter);
 app.use("/pages", pagesRouter);
 app.use("/", indexRouter);

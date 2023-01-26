@@ -1,125 +1,92 @@
 const express = require("express");
 const router = express.Router();
 const Product = require("../models/product");
-const Category = require("../models/category");
-var moment = require("moment");
 
-// GET: display all products
+
 router.get("/", async (req, res) => {
-  const successMsg = req.flash("success")[0];
-  const errorMsg = req.flash("error")[0];
-  const perPage = 8;
-  let page = parseInt(req.query.page) || 1;
-  try {
-    const products = await Product.find({})
-      .sort("-createdAt")
-      .skip(perPage * page - perPage)
-      .limit(perPage)
-      .populate("category");
+    const perPage = 8;
+    let page = parseInt(req.query.page) || 1;
+    try {
+        const sortKey = req.query.sortKey || null
+        const sortValue = req.query.sortValue || 1
+        const sort = sortKey ? [[sortKey, sortValue]] : [];
 
-    const count = await Product.count();
+        const categories = req.query.category || null
+        const filers = categories ? {"category": categories} : {}
 
-    res.render("shop/index", {
-      pageName: "All Products",
-      products,
-      successMsg,
-      errorMsg,
-      current: page,
-      breadcrumbs: null,
-      home: "/products/?",
-      pages: Math.ceil(count / perPage),
-    });
-  } catch (error) {
-    console.log(error);
-    res.redirect("/");
-  }
+        const products = await Product.find(filers)
+            .sort(sort)
+            .skip(perPage * page - perPage)
+            .limit(perPage)
+
+        res.send({
+            message: "Products indexed successfully.",
+            date: products
+        })
+
+    } catch (error) {
+        res.status(400).send({
+            message: error.message
+        })
+    }
 });
 
-// GET: search box
 router.get("/search", async (req, res) => {
-  const perPage = 8;
-  let page = parseInt(req.query.page) || 1;
-  const successMsg = req.flash("success")[0];
-  const errorMsg = req.flash("error")[0];
+    const perPage = 8;
+    let page = parseInt(req.query.page) || 1;
 
-  try {
-    const products = await Product.find({
-      title: { $regex: req.query.search, $options: "i" },
-    })
-      .sort("-createdAt")
-      .skip(perPage * page - perPage)
-      .limit(perPage)
-      .populate("category")
-      .exec();
-    const count = await Product.count({
-      title: { $regex: req.query.search, $options: "i" },
-    });
-    res.render("shop/index", {
-      pageName: "Search Results",
-      products,
-      successMsg,
-      errorMsg,
-      current: page,
-      breadcrumbs: null,
-      home: "/products/search?search=" + req.query.search + "&",
-      pages: Math.ceil(count / perPage),
-    });
-  } catch (error) {
-    console.log(error);
-    res.redirect("/");
-  }
+    try {
+        const products = await Product.find({
+            title: {$regex: req.query.text, $options: "i"},
+        })
+            .sort([['stock', -1]])
+            .skip(perPage * page - perPage)
+            .limit(perPage)
+            .exec();
+
+        res.send({
+            message: "Products find successfully.",
+            data: {
+                text: req.query.text,
+                products: products
+            }
+        })
+    } catch (error) {
+        res.status(400).send({
+            message: error.message
+        })
+    }
 });
 
-//GET: get a certain category by its slug (this is used for the categories navbar)
-router.get("/:slug", async (req, res) => {
-  const successMsg = req.flash("success")[0];
-  const errorMsg = req.flash("error")[0];
-  const perPage = 8;
-  let page = parseInt(req.query.page) || 1;
-  try {
-    const foundCategory = await Category.findOne({ slug: req.params.slug });
-    const allProducts = await Product.find({ category: foundCategory.id })
-      .sort("-createdAt")
-      .skip(perPage * page - perPage)
-      .limit(perPage)
-      .populate("category");
 
-    const count = await Product.count({ category: foundCategory.id });
+router.get("/:id", async (req, res) => {
+    try {
+        const product = await Product.findOne({
+            _id: req.params.id
+        });
 
-    res.render("shop/index", {
-      pageName: foundCategory.title,
-      currentCategory: foundCategory,
-      products: allProducts,
-      successMsg,
-      errorMsg,
-      current: page,
-      breadcrumbs: req.breadcrumbs,
-      home: "/products/" + req.params.slug.toString() + "/?",
-      pages: Math.ceil(count / perPage),
-    });
-  } catch (error) {
-    console.log(error);
-    return res.redirect("/");
-  }
+        if (!product) {
+            throw new Error("Product not found.")
+        }
+
+
+        await Product.findByIdAndUpdate(req.params.id, {
+            $inc: {
+                view: 1
+            }
+        })
+
+        res.send({
+            message: "Product find successfully.",
+            data: product
+        })
+
+    } catch (error) {
+        res.status(400).send({
+            message: error.message
+        })
+    }
 });
 
-// GET: display a certain product by its id
-router.get("/:slug/:id", async (req, res) => {
-  const successMsg = req.flash("success")[0];
-  const errorMsg = req.flash("error")[0];
-  try {
-    const product = await Product.findById(req.params.id).populate("category");
-    res.render("shop/product", {
-      pageName: product.title,
-      product,
-      successMsg,
-      errorMsg,
-      moment: moment,
-    });
-  } catch (error) {
-    console.log(error);
-    return res.redirect("/");
-  }
-});
 
 module.exports = router;

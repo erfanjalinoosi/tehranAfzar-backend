@@ -5,15 +5,19 @@ const slug = require("mongoose-slug-updater");
 mongoose.plugin(slug);
 
 const categorySchema = Schema({
-  title: {
-    type: String,
-    required: true,
-  },
-  slug: {
-    type: String,
-    unique: true,
-    slug: "title",
-  },
+    title: {
+        type: String,
+        required: true,
+    },
+    slug: {
+        type: String,
+        unique: true,
+        slug: "title",
+    },
+    parent: {
+        type: Schema.Types.ObjectId,
+        ref: 'Category'
+    }
 });
 
 module.exports = mongoose.model("Category", categorySchema);
