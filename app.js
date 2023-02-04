@@ -27,11 +27,11 @@ const indexRouter = require("./routes/index");
 const productsRouter = require("./routes/products");
 const categoryRouter = require("./routes/category");
 const usersRouter = require("./routes/user");
-const pagesRouter = require("./routes/pages");
+const orderRouter = require("./routes/order")
 app.use("/products", productsRouter);
 app.use("/categories", categoryRouter);
 app.use("/user", usersRouter);
-app.use("/pages", pagesRouter);
+app.use("/order", orderRouter)
 app.use("/", indexRouter);
 
 // error handler

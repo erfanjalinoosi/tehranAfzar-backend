@@ -87,51 +87,24 @@ const adminBro = new AdminBro({
                     icon: "User",
                 },
                 properties: {
-                    user: {
-                        isTitle: true,
+                    userId: {
+                        isVisible: {list: true, filter: true, show: true, edit: false},
                     },
                     _id: {
                         isVisible: {list: false, filter: true, show: true, edit: false},
                     },
-                    paymentId: {
+                    amount: {
                         isVisible: {list: false, filter: true, show: true, edit: false},
                     },
                     address: {
-                        isVisible: {list: false, filter: true, show: true, edit: false},
+                        isVisible: {list: false, filter: false, show: false, edit: false},
                     },
-                    createdAt: {
+                    products: {
                         isVisible: {list: true, filter: true, show: true, edit: false},
                     },
-                    cart: {
-                        isVisible: {list: false, filter: false, show: true, edit: false},
-                        components: {
-                            show: AdminBro.bundle("../components/admin-order-component.jsx"),
-                        },
-                    },
-                    "cart.items": {
-                        isVisible: {
-                            list: false,
-                            filter: false,
-                            show: false,
-                            edit: false,
-                        },
-                    },
-                    "cart.totalQty": {
-                        isVisible: {
-                            list: false,
-                            filter: false,
-                            show: false,
-                            edit: false,
-                        },
-                    },
-                    "cart.totalCost": {
-                        isVisible: {
-                            list: false,
-                            filter: false,
-                            show: false,
-                            edit: false,
-                        },
-                    },
+                    createdAt: {
+                        isVisible: {list: false, filter: true, show: true, edit: false},
+                    }
                 },
             },
         },
