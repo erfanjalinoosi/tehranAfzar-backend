@@ -30,7 +30,7 @@ const adminBro = new AdminBro({
                 },
                 properties: {
                     description: {
-                        type: "richtext",
+                        // type: "richtext",
                         isVisible: {list: false, filter: true, show: true, edit: true},
                     },
                     _id: {
