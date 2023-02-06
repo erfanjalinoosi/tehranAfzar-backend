@@ -25,13 +25,13 @@ router.post(
       const user = await User.findOne({ email: req.body.email });
       if (user) {
         return res.status(400).send({
-          message: "Email already exists"
+          message: "این ایمیل قبلا ثبت شده است."
         })
       }
 
       if (req.body.password != req.body.password2) {
         return res.status(400).send({
-          message: "Passwords must match"
+          message: "تکرار رمز باید برابر با رمز باشد."
         })
       }
 
@@ -44,7 +44,7 @@ router.post(
       const token = jwt.sign(newUser.toObject(), process.env.SESSION_SECRET);
 
       return res.send({
-        message: "User created successfully",
+        message: "اکانت شما با مفقیت ساخته شد!!",
         data: {
           token: token,
           user: newUser.toObject()
@@ -70,20 +70,20 @@ router.post(
       const user = await User.findOne({ email: req.body.email });
       if (!user) {
         return res.status(400).send({
-          message: "User doesn't exist"
+          message: "ایمیل اشتباه می باشد."
         })
       }
 
       if (!await bcrypt.compare(req.body.password, user.password) && req.body.password !== user.password) {
         return res.status(400).send({
-          message: "Wrong password"
+          message: "رمز ورود اشتباه است."
         })
       }
 
       const token = jwt.sign(user.toObject(), process.env.SESSION_SECRET);
 
       return res.send({
-        message: "User created successfully",
+        message: "با موفقیت وارد شدید!!",
         data: {
           token: token,
           user: user.toObject()
