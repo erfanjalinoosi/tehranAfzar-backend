@@ -1,7 +1,8 @@
 let middlewareObject = {};
 const jwt = require("jsonwebtoken");
+const User = require("../models/user");
 
-middlewareObject.isLoggedIn = (req, res, next) => {
+middlewareObject.isLoggedIn = async (req, res, next) => {
 
   if (!req.header('authorization')) {
     return res.status(400).send({
@@ -11,7 +12,9 @@ middlewareObject.isLoggedIn = (req, res, next) => {
 
   const token = req.header('authorization').split(' ');
 
-  const user = jwt.decode(token[1]);
+  const decrypted = jwt.decode(token[1]);
+
+  const user = await User.findById(decrypted._id);
 
   if (!user) {
     return res.status(400).send({

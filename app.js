@@ -28,23 +28,31 @@ const productsRouter = require("./routes/products");
 const categoryRouter = require("./routes/category");
 const usersRouter = require("./routes/user");
 const orderRouter = require("./routes/order")
+const addressRouter = require("./routes/address")
 app.use("/products", productsRouter);
+app.use("/addresses", addressRouter);
 app.use("/categories", categoryRouter);
 app.use("/user", usersRouter);
 app.use("/order", orderRouter)
 app.use("/", indexRouter);
 
 // error handler
+const {ValidationError} = require("express-json-validator-middleware");
 app.use(function (err, req, res, next) {
-  return res.status(400).send({
-    message: err.message
-  })
+
+    if (err instanceof ValidationError) {
+        return res.status(400).send(err.validationErrors);
+    }
+
+    return res.status(400).send({
+        message: err.message
+    })
 });
 ``
-var port = process.env.PORT || 3000;
+const port = process.env.PORT || 3000;
 app.set("port", port);
 app.listen(port, () => {
-  console.log("Server running at port " + port);
+    console.log("Server running at port " + port);
 });
 
 module.exports = app;

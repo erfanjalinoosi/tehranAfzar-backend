@@ -1,4 +1,9 @@
 const { check, validationResult } = require("express-validator");
+const {Validator} = require('express-json-validator-middleware')
+const {validate} = new Validator({
+  removeAdditional: "all"
+});
+
 
 const userSignUpValidationRules = () => {
   return [
@@ -21,7 +26,7 @@ const userSignInValidationRules = () => {
 const userContactUsValidationRules = () => {
   return [
     check("name", "Please enter a name").not().isEmpty(),
-    check("email", "Please enter a valid email address")
+    check("email", "Please enter a valid email addresses")
       .not()
       .isEmpty()
       .isEmail(),
@@ -58,7 +63,7 @@ const validateSignin = (req, res, next) => {
     errors.array().forEach((error) => {
       messages.push(error.msg);
     });
-    
+
     return res.status(400).send({
       message: "Signin failed.",
       data: {
@@ -94,4 +99,5 @@ module.exports = {
   validateSignup,
   validateSignin,
   validateContactUs,
+  validate
 };

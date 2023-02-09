@@ -23,8 +23,9 @@ const orderSchema = Schema({
         type: Number,
         default: 0
     },
-    address: {
-        type: String,
+    addressId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Address",
     },
     createdAt: {
         type: Date,

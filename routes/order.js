@@ -1,18 +1,25 @@
 const express = require("express");
 const router = express.Router();
 const Order = require("../models/order");
+const Address = require("../models/address");
 const Product = require("../models/product");
 const middleware = require("../middleware");
-const mongoose = require("mongoose");
-
+const {validate} = require("../config/validator");
+const storeOrderSchema = require("../schemas/orders/storeOrderSchema")
 
 router.post(
     "/",
-    [middleware.isLoggedIn],
+    [middleware.isLoggedIn, validate(storeOrderSchema)],
     async (req, res, next) => {
         try {
 
             const items = req.body.items;
+            const addressId = req.body.addressId;
+            const address = await Address.findById(addressId);
+
+            if (!address) {
+                throw Error('Address not found.')
+            }
 
             if (!items || items.length === 0) {
                 throw Error('You should add at least one product.')
@@ -50,6 +57,7 @@ router.post(
                 userId: req.user._id,
                 products: products,
                 amount: amount,
+                addressId: addressId,
                 createdAt: new Date()
             })
 

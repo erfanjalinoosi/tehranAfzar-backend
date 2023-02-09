@@ -4,6 +4,7 @@ const AdminBroMongoose = require("admin-bro-mongoose");
 const mongoose = require("mongoose");
 const Product = require("../models/product");
 const User = require("../models/user");
+const Address = require("../models/address");
 const Order = require("../models/order");
 const Category = require("../models/category");
 AdminBro.registerAdapter(AdminBroMongoose);
@@ -94,15 +95,47 @@ const adminBro = new AdminBro({
                         isVisible: {list: false, filter: true, show: true, edit: false},
                     },
                     amount: {
-                        isVisible: {list: false, filter: true, show: true, edit: false},
+                        isVisible: {list: true, filter: true, show: true, edit: false},
                     },
-                    address: {
-                        isVisible: {list: false, filter: false, show: false, edit: false},
+                    addressId: {
+                        isVisible: {list: true, filter: true, show: true, edit: false},
                     },
                     products: {
                         isVisible: {list: true, filter: true, show: true, edit: false},
                     },
                     createdAt: {
+                        isVisible: {list: true , filter: true, show: true, edit: false},
+                    }
+                },
+            },
+        },
+        {
+            resource: Address,
+            options: {
+                parent: {
+                    name: "User Content",
+                    icon: "User",
+                },
+                properties: {
+                    userId: {
+                        isVisible: {list: true, filter: true, show: true, edit: false},
+                    },
+                    _id: {
+                        isVisible: {list: false, filter: true, show: true, edit: false},
+                    },
+                    title: {
+                        isVisible: {list: false, filter: true, show: true, edit: true},
+                    },
+                    unit: {
+                        isVisible: {list: true, filter: true, show: true, edit: true},
+                    },
+                    number: {
+                        isVisible: {list: true, filter: true, show: true, edit: true},
+                    },
+                    createdAt: {
+                        isVisible: {list: false, filter: true, show: true, edit: false},
+                    },
+                    updatedAt: {
                         isVisible: {list: false, filter: true, show: true, edit: false},
                     }
                 },
