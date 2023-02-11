@@ -19,6 +19,9 @@ const addressSchema = new mongoose.Schema({
         name: {
             type: String,
         },
+        nationalCode: {
+            type: String,
+        },
         phoneNumber: {
             type: String,
             required: true

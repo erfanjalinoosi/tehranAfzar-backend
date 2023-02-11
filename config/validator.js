@@ -1,8 +1,12 @@
 const { check, validationResult } = require("express-validator");
 const {Validator} = require('express-json-validator-middleware')
-const {validate} = new Validator({
+const addFormats = require("ajv-formats");
+
+const validator = new Validator({
   removeAdditional: "all"
 });
+const validate = validator.validate
+addFormats(validator.ajv);
 
 
 const userSignUpValidationRules = () => {

@@ -19,6 +19,9 @@ module.exports = {
                     name: {
                         type: "string"
                     },
+                    nationalCode: {
+                        type: "string"
+                    },
                     phoneNumber: {
                         type: "string"
                     }
