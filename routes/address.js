@@ -65,5 +65,23 @@ router.get("/", middleware.isLoggedIn, async (req, res, next) => {
     }
 });
 
+router.get("/:id", middleware.isLoggedIn, async (req, res, next) => {
+    try {
+        const addressId = req.params.id
+        const userAddresses = await Address.findOne({userId: req.user._id, _id: addressId});
+
+        if (!userAddresses) {
+            throw Error("User Address not found.")
+        }
+
+        res.send({
+            message: "User address finded successfully.",
+            data: userAddresses
+        })
+    } catch (err) {
+        next(err)
+    }
+});
+
 
 module.exports = router;
