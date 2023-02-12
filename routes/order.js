@@ -4,7 +4,7 @@ const Order = require("../models/order");
 const Address = require("../models/address");
 const Product = require("../models/product");
 const middleware = require("../middleware");
-const {validate} = require("../config/validator");
+const { validate } = require("../config/validator");
 const storeOrderSchema = require("../schemas/orders/storeOrderSchema")
 
 router.post(
@@ -64,7 +64,7 @@ router.post(
             await order.save()
 
             for (const item of items) {
-                await Product.findOneAndUpdate(item.id, {
+                await Product.findOneAndUpdate({ _id: item.id }, {
                     $inc: {
                         stock: item.count * -1,
                         purchase: item.count * 1
