@@ -17,7 +17,7 @@ const adminBro = new AdminBro({
     databases: [mongoose],
     rootPath: "/admin",
     branding: {
-        companyName: "Tehran Afzar",
+        companyName: "TechnoJet",
         logo: "/logo.png",
         softwareBrothers: false
     },
